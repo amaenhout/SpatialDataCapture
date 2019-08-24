@@ -1,0 +1,10 @@
+art_culture = ["boeken",'chef']
+science = []
+nature_biology = []
+politics_society =['politicus','adel'] 
+sports = []
+religion =[] 
+geography = ['wijk','restaurant','eiland','molen','kasteel','regio','zwembad','building','road','island','winkelcentrum','gebied','airport','rail line','strada']
+person = ['politicus','person','biography','biography2','chef'] 
+period = []
+

@@ -1,0 +1,7 @@
+born = ["geboren","geboortedatum","date de naissance","birth_date","geburtsdatum","annonascita"]
+died = ["overleden","sterfdatum","date de décès","death_date","légend","sterbedatum","annomorte"]
+lived = ["leven"]
+period = ["opgericht","openingsdatum","introductie","date de construction","erbaut","foundation","creation","dateparution","fondation","opened","année début","established","datum","eingemeindungsdatum","ej","züchtungsjahr","annofondazione","annoconsacr","eerste editie","released","date","creation","eröffnung","inaugurazione","ua","designation1_date","established_date","dates","foundation","apertura","gründungsdatum"]
+occupation = ["beroep","profession","charte","kurzbeschreibung","charte","activités"]
+taxobox = ["taxon6_name","type"]
+all = born+died+lived+period+occupation+taxobox+["category"]

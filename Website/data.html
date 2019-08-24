@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<head>
+	<link rel='shortcut icon' type='image/x-icon' href='./img/sbs logo.jpg' />
+	<title> Stories Behind Streets </title>
+
+	<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+	integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+	crossorigin=""/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" href="./css/style.css"/>
+<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+<div id= "headerdata">
+	<div id="home2">
+		<a href="./index.html"><img src= "./img/sbs logo.jpg" class="image1" alt="team logo"/></a>
+	</div>
+	<div id="flags">
+		<button class="country" id="europe" title="Europe" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="austria" title="Austria" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="belgium" title="Belgium" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="france" title="France" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="germany" title="Germany" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="italy" title="Italy" onclick="DrawMap(this.id,this.title)"></button>
+		<!--<button class="country" id="netherlands" title="Netherlands" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="portugal" title="Portugal" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="spain" title="Spain" onclick="DrawMap(this.id,this.title)"></button> -->
+		<button class="country" id="switzerland" title="Switzerland" onclick="DrawMap(this.id,this.title)"></button>
+
+
+	</div>
+
+	<div id="menu">
+		<div class="menuitem"><a href="./team.html">SBS Team</a></div>
+		<div class="menuitem"><a href="./insights.html">Insights</a></div>
+		<div class="menuitem"><a href="./data.html">Explore the Data!</a></div>
+		<div class="menuitem"><a href="./methods.html">Methods</a></div>
+		<div class="menuitem"><a href="./about.html">About</a></div>
+	</div>
+</div>
+
+<body>
+	<div id="mySidenav" class="sidenav">
+		<a href="./data.html" id="world" >Map By Categories</a>
+		<a href="./datacat.html" id="category">Highest Category Counts</a>
+		<a href="./charts.html" id="analysis">Charts & Country Statistics</a>
+		<a href="./city.html" id="city">City Case Studies</a>
+
+	</div>
+	<div id="mapborder">
+		<div id="map-canvas">
+		</div>
+		<div id = "selected" >
+			<div>
+				<h4><span id="selectedcountry">Europe 🇪🇺</span> : <span id="selectedcategory">Art & Culture</span></h4>
+			</div>
+		</div>
+
+		<div id="topfivebox">
+			<p>Top 5 street names in <br/><b><span id='cat'>Art & Culture</span></b></p>
+			<ol>
+			<li><b><span id='name_one'></span></li></b>
+			<li><b><span id='name_two'></span></li></b>
+			<li><b><span id='name_three'></span></li></b>
+			<li><b> <span id='name_four'></span></li></b>
+			<li><b> <span id='name_five'></span></li></b>
+		</ol>
+		</div>
+
+		<div id="mapbox">
+			<span id='close' onclick='this.parentNode.parentNode.removeChild(this.parentNode); return false;'>x</span>
+			<br/>
+			<p> Click on a hexagon to show its total number of streets, the count of streets in a selected category, and the proportion of total number of streets in the hexagon belonging to the category.</p>
+		</div>
+
+
+		<!-- <div id = "streets" >
+			<div>
+				<span id="selectedcountry">Europe 🇪🇺</span> : <span id="streets"> 0 </span>
+			</div>
+		</div> -->
+
+		<div class="infobox">
+			<button type="button" class="btn btn-info btn-lg" id="right-panel-link" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-info-sign"></span> <strong>HELP</strong></button>
+			<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3 class="modal-title">INFORMATION</h3>
+				</div>
+				<div class="modal-body" style="width: 90%; left:3.5vw;">
+					<div class="panel panel-default">
+					      <div class="panel-heading">
+					        <h4 class="panel-title">
+					         <strong>What is on this page?</strong></h4>      </div>
+<div class="panel-body"><p>This page contains a spatial visualisation of street names belonging to each specific category in selected countries. The proportion shown is calculated by dividing the number of street name counts belonging to the selected category divided by the total number of streets in the hexagon, which are calculated based on the position of street centroids. Colours correspond with the count of streets in each category. </p>
+					<p>The default view is of the distribution of street names with the arts and culture theme in the selected countries in Western Europe.</p>
+					<p>The top five street names in each category are shown at the top right corner of the map.</p>
+					<p>More details of the workflow may be found in the <a href="./methods.html">Methods</a> page. </p>
+					<br/></div>
+					    </div>
+
+<div class="panel panel-default">
+					      <div class="panel-heading">
+					        <h4 class="panel-title">
+					         <strong>How do I use this page?</strong>				        </h4>      </div>
+<div class="panel-body"><ol>
+						<li> Toggle between different regional and national scales by clicking on the flags.</li>
+						<br/>
+						<li> Click the buttons on the right panel to view the variations in category counts. There are three types of categories:
+						<ol>
+							<li> <strong>Themes</strong> (arts and culture, science and technology, religion, geography, nature and biology, sports, politics economy and society, others)</li>
+							<button class="btncat" id="art_culture" title = "Art & Culture"></button>
+							<button class="btncat" id="geography" title ="Geography"></button>
+							<button class="btncat" id = "nature_biology" title ="Nature & Biology"></button>
+							<button class="btncat" id = "politics_economy_society" title ="Politics, Economy & Society"></button>
+							<button class="btncat" id = "religion" title ="Religion"> </button>
+							<button class="btncat" id ="science_technology" title ="Science"></button>
+							<button class="btncat" id ="sports" title ="Sports"></button>
+							<button class="btncat" id ="other" title ="Other"></button>
+							<li> <strong>Subject type</strong> (animal, person, plant), and </li>
+							<button class="btncat" id ="animal" title="Animal"></button>
+							<button class="btncat" id ="person" title="Person"></button>
+							<button class="btncat" id ="plant" title="Plant"></button>
+							<li> <strong>Time period</strong> (1600 to present).</li>
+						</ol>
+						<br/>
+						<li> The current selection of country and category may be viewed at the top left corner of the map.</li>
+						<br/>
+						<li> Switch between viewing the hexagon layers for street name counts and for proportion of street names by clicking the Count/Proportion bar below the help button.</li>
+						<br/>
+	            		<li> Click on a hexagon to show more details about the streets in the hexagon: the count of streets in the category, the proportion of streets in the category out of all the streets in the hexagon, and the total number of streets in the hexagon. </li>
+						<br/>
+	            		<li> To explore other pages, use the navigation buttons on the left side of the page. </li>
+									<div class="index-button"><img src="./img/icons/europe.png" alt="Europe image" class="index-image" style="width:65px;height:65px;"></div>
+									<div class="index-button"><img src="./img/icons/hexagons.png" alt="Hexagon image" class="index-image" style="width:65px;height:65px;"></div>
+									<div class="index-button"><img src="./img/icons/analysis.png" alt="Chart image" class="index-image" style="width:65px;height:65px;"></div>
+									<div class="index-button"><img src="./img/icons/city.png" alt="City image" class="index-image" style="width:65px;height:65px;"></div>
+					</ol></div>
+					    </div>
+
+	            	<br/>
+				    <div class="panel panel-default">
+					      <div class="panel-heading">
+					        <h4 class="panel-title">
+					         <strong>Help! The data is not loading?</strong>
+					        </h4>
+					      </div>
+      <div class="panel-body"><br/><p>Please try refreshing the page until it loads. Connection to the server might have been lost.</p><br/></div>
+					    </div>
+							<div class="panel panel-default">
+					      <div class="panel-heading">
+					        <h4 class="panel-title">
+					      <strong>I think the data is incorrect.</strong>
+					        </h4>
+					      </div>
+				        <div class="panel-body"><br/><p> Our analysis relied on data from OpenStreetMap and WikiData API, and thus is only appropriate for a broad approximation of street toponymics in Western Europe. Besides the issues with incorrect or incomplete open data, language barriers may have impeded the analysis. Thus some hexagons may appear to have a total of zero streets. Nevertheless, we endeavoured to give a broad, accurate representation of street names in Western Europe based on our available data. </p><br/></div>
+					      </div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+
+	<div id="toggle">
+			<input id="toggle-event" type="checkbox" checked data-toggle="toggle" data-on="COUNT" data-off="PROPORTION" data-width="100%" data-onstyle="warning" data-offstyle="primary">
+	</div>
+		<div id="selections">
+    		<div class="container">
+  				<div class="panel-group" id="accordion">
+    				<div class="panel panel-default">
+      					<div class="panel-heading">
+       						<h4 class="panel-title">
+        						<a data-toggle="collapse" data-parent="#accordion" href="#collapse1"><strong>Theme</strong></a>
+        					</h4>
+     					 </div>
+      					<div id="collapse1" class="panel-collapse collapse in">
+       						<div class="panel-body">
+        						<table border = "0">
+        							<tr>
+              							<td style="text-align:center">
+               								<button class="btncat" id="art_culture" title = "Art & Culture" onclick="DrawCat(this.id,this.title)"></button>
+            								<p></p>
+											<button class="btncat" id="geography" title ="Geography" onclick="DrawCat(this.id,this.title)"></button>
+											<p></p>
+											<button class="btncat" id = "nature_biology" title ="Nature & biology" onclick="DrawCat(this.id,this.title)"></button>
+											<p></p>
+											<button class="btncat" id = "politics_economy_society" title ="Politics & Economy & Society" onclick="DrawCat(this.id,this.title)"></button>
+            							</td>
+              							<td style="text-align:center">
+											<button class="btncat" id = "religion" title ="Religion" onclick="DrawCat(this.id,this.title)"> </button>
+											<p></p>
+											<button class="btncat" id ="science_technology" title ="Science" onclick="DrawCat(this.id,this.title)"></button>
+											<p></p>
+											<button class="btncat" id ="sports" title ="Sports" onclick="DrawCat(this.id,this.title)"></button>
+											<p></p>
+											<button class="btncat" id ="other" title ="Other" onclick="DrawCat(this.id,this.title)"></button>
+										</td>
+            							</tr>
+								</table>
+       						</div>
+      					</div>
+    				</div>
+    				<div class="panel panel-default">
+      					<div class="panel-heading">
+        					<h4 class="panel-title">
+          						<a data-toggle="collapse" data-parent="#accordion" href="#collapse2"><strong>Subject Type</strong></a>
+        					</h4>
+      					</div>
+      				<div id="collapse2" class="panel-collapse collapse">
+						<div class="panel-body">
+							<table border = "0">
+								<tr>
+									<td style="text-align:center">
+										<button class="btncat" id ="animal" title="Animal" onclick="DrawCat(this.id,this.title)"></button>
+										<p></p>
+									</td>
+									<td style="text-align:center">
+										<button class="btncat" id ="plant" title="Plant" onclick="DrawCat(this.id,this.title)"></button>
+										<p></p>
+										<!--<button class="btncat" id ="other_sub" onclick="DrawCat(this.id,this.id)"><span class="tooltiptext">Others</span></button>-->
+									</td>
+									<tr><td style="text-align:center">
+									<button class="btncat" id ="person" title="Person" onclick="DrawCat(this.id,this.title)"></button>
+								</td></tr>
+
+								</tr>
+							</table>
+						</div>
+      					</div>
+    				</div>
+    				<div class="panel panel-default">
+     					<div class="panel-heading">
+        					<h4 class="panel-title">
+          						<a data-toggle="collapse" data-parent="#accordion" href="#collapse3"><strong>Time Period</strong></a>
+        					</h4>
+      					</div>
+      				<div id="collapse3" class="panel-collapse collapse">
+        				<div class="panel-body">
+        					<table border = "0">
+           						<tr>
+              						<td style="text-align:center">
+										<button class="btnperiod" id ="before1600" title ="before 1600" onclick="DrawCat(this.id,this.title)"> before 1600</button>
+										<p></p>
+										<button class="btnperiod" id ="p1700-p1800" title = "1700-1800" onclick="DrawCat(this.id,this.title)"> 1700 - 1800</button>
+										<p></p>
+										<button class="btnperiod" id ="p1850-p1900"  title ="1850-1900" onclick="DrawCat(this.id,this.title)">1850 - 1900</button>
+										<p></p>
+										<button class="btnperiod" id ="p1920-p1940"  title ="1920-1940" onclick="DrawCat(this.id,this.title)">1920 - 1940</button>
+										<p></p>
+										<button class="btnperiod" id ="p1960-p1980"  title ="1960-1980" onclick="DrawCat(this.id,this.title)"> 1960 - 1980</button>
+										<p></p>
+												</td>
+
+									<td style="text-align:center">
+                		<button class="btnperiod" id ="p1600-p1700"  title ="1600-1700" onclick="DrawCat(this.id,this.title)">1600 - 1700</button>
+										<p></p>
+										<button class="btnperiod" id ="p1800-p1850"  title ="1800-1850" onclick="DrawCat(this.id,this.title)">1800 - 1850</button>
+										<p></p>
+										<button class="btnperiod" id ="p1900-p1920"  title ="1900-1920" onclick="DrawCat(this.id,this.title)"> 1900 - 1920</button>
+										<p></p>
+										<button class="btnperiod" id ="p1940-p1960"  title ="1940-1960" onclick="DrawCat(this.id,this.title)"> 1940 - 1960</button>
+										<p></p>
+										<button class="btnperiod" id ="p1980-p2000"  title ="1980-2000" onclick="DrawCat(this.id,this.title)">1980 - 2000</button>
+										<p></p>
+									</td>
+<tr>          						<td style="text-align:center">
+
+									<button class="btnperiod" id ="p2000-p2020"  title ="2000-2020" onclick="DrawCat(this.id,this.title)"> 2000 - 2020</button>
+</td>								</tr>
+            					</tr>
+       						</table>
+       					</div>
+     				</div>
+    			</div>
+  			</div>
+		</div>
+	</div>
+
+
+
+	<!-- The Javascript from external websites gets Loaded Here -->
+	<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+	integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+	crossorigin=""></script>
+	<script src="./js/jquery-3.4.1.js"></script>
+	<script src="./js/require.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+	<script src="./js/flags.js"></script>
+	<script src="./js/mapData.js"></script>
+	<script src="./js/mappingproportion.js"></script>
+	<script src="./js/top.js"></script>
+	<script type='text/javascript' src='http://code.jquery.com/jquery-1.10.2.min.js?ver=1.10.2'></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+
+	<script type="text/javascript">
+
+		if(country == undefined ){
+			var country = "europe";
+		}
+		if(category == undefined ){
+			var category = "art_culture";
+			var titlecat = "Art & Culture";
+		}
+		if(toggle == undefined ){
+			var toggle = true;
+		}
+		// first time we run website -> europe
+		mapcount(country,category)
+		topstreets(country,category)
+		// $("#cat").text(titlecat)
+		$(function() {
+			$('#toggle-event').change(function() {
+				window.toggle = $(this).prop('checked')
+				if (toggle == true){
+					mapcount(country, category)
+				} else {
+					mapproportion(country, category)
+				}
+			})
+		})
+
+
+		function DrawMap(country,titlecountry) {
+			// save country
+			$("#selectedcountry").text(titlecountry + " " + getCountryFlag(country));
+			window.country = country;
+			topstreets(country,category)
+			if (toggle == true){
+				mapcount(country, category)
+			} else {
+				mapproportion(country, category)
+			}
+
+		}
+
+		function DrawCat(category,titlecat) {
+			// save category
+			titlecat = titlecat.charAt(0).toUpperCase() + titlecat.slice(1);
+			$("#selectedcategory").text(titlecat);
+			var themes = ["Art & Culture", "Science","Sports","Religion","Other","Nature","Nature & biology","Geography","Politics & Economy & Society"]
+			if(themes.includes(titlecat)){			$("#cat").text(titlecat);	document.getElementById("topfivebox").style.display="block"}
+			else{document.getElementById("topfivebox").style.display="none"}
+			window.category = category;
+			if (toggle == true){
+				mapcount(country, category)
+			} else {
+				mapproportion(country, category)
+			}
+			topstreets(country,category)
+		}
+
+
+	</script>
+</body>
+</html>

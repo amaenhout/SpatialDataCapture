@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Apr 24 14:44:02 2019
+
+@author: Titus Ng and Andrew Wong
+"""
+#This code is used to convert a shapefile (e.g. France, Paris) into a Hexagon Map using Uber's H3 library
+#For visualisation, random values are used to demonstrate chloropleth mapping
+#For reference on Aperture size or H3 code, see Uber H3 
+#Adapted from UnifiedDataLayers.ipynb in H3py Github
+
+
+#Imports
+
+import os
+os.getcwd()
+os.chdir('') #FILL THIS IN
+print("Current Working Directory " , os.getcwd())
+
+import shapely
+import geopandas as gpd
+from shapely import geometry
+from shapely.geometry import mapping
+from shapely.ops import cascaded_union#, unary_union
+from h3 import h3
+import numpy as np
+
+#Load the shp data 
+countries_shp = gpd.read_file("/individual country borders/austria_shp/austria.shp")
+countries_shp.plot()
+
+
+APERTURE_SIZE = 6  # possible 1 - 15, Smaller numbers = bigger hexagons = fewer hexagons
+
+# Unify the CT boundries - creates a multipolygon with the outlines only 
+union_poly = cascaded_union(countries_shp.geometry)
+type(union_poly)
+# Generate the hexagons within the boundary using PolyFill
+hex_list=[]
+for n,g in enumerate(union_poly):
+    print(n,'\r',)
+    temp  = mapping(g)
+    temp['coordinates']=[[[j[1],j[0]] for j in i] for i in temp['coordinates']]  
+    hex_list.extend(h3.polyfill(temp,APERTURE_SIZE))
+
+#note, above code will only work if  union_poly is a Multipolygon, not Polygon
+    #this is dependent on whether the shp input is one 'island' or more
+#if type(union_poly) is Polygon rather than Multipolygon, use this code 
+#hex_list=[]
+#temp  = mapping(union_poly)
+#temp['coordinates']=[[[j[1],j[0]] for j in i] for i in temp['coordinates']]  
+#hex_list.extend(h3.polyfill(temp,APERTURE_SIZE))
+
+
+# create hex dataframe
+hex_col = 'hex{}'.format(APERTURE_SIZE)
+dfh = gpd.GeoDataFrame(hex_list,columns=[hex_col])
+print('Sanity Check\nnumber of hexes:', len(hex_list))
+print('number of duplicates:', len(hex_list) - len(dfh.drop_duplicates()))
+
+# add lat & lng of center of hex 
+dfh['lng']=dfh[hex_col].apply(lambda x: h3.h3_to_geo(x)[0])
+dfh['lat']=dfh[hex_col].apply(lambda x: h3.h3_to_geo(x)[1])
+
+# create Point object of hex center based on hex latlng
+dfh['geometry'] = dfh.apply(lambda x: shapely.geometry.Point(x.lng,x.lat),1)
+dfh.crs = {"init": "epsg:4326"}
+
+#Transform point object to polygon object  
+dfh['hexgeom'] = dfh[hex_col].apply(lambda x: h3.h3_to_geo_boundary(x))
+dfh['hexgeom2'] = dfh['hexgeom'].apply(lambda x: geometry.Polygon([[p[1], p[0]] for p in x]))
+
+#dfh contains both point (hexgeom) and polygon (hexgeom2) geometries
+#Duplicate dfh for plotting
+dfh2 = dfh
+
+#remove unnecessary geometries as only 1 can be present for plotting and exporting
+dfh2['geometry'] = dfh2['hexgeom2']
+dfh2 = dfh2.drop(['hexgeom', 'hexgeom2', 'lat', 'lng'], axis=1)
+dfh2['randNumCol'] = np.random.randint(0,5000, size=len(dfh2))
+hplot = dfh2.plot(column='randNumCol',cmap='PuOr', figsize=(20,20),legend=True)
+#hplot.set_xlim(6.3,6.5)
+#hplot.set_ylim(42.8,43.2)
+
+
+#Code for exporting and importing
+dfh2.to_file('austria6.json', driver="GeoJSON")
+dfh_import_test = gpd.read_file("dfh4_countries.json")
+
+hplot = dfh_import_test.plot(column='randNumCol',cmap='PuOr', figsize=(20,20),legend=True)
+hplot.set_xlim(-50,50)
+hplot.set_ylim(-10,60)
+
+
+
+
+

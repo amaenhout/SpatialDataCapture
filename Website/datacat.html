@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<head>
+	<link rel='shortcut icon' type='image/x-icon' href='./img/sbs logo.jpg' />
+
+	<title> Stories Behind Streets </title>
+
+	<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+	integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+	crossorigin=""/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" href="./css/style.css"/>
+<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+<div id= "headerdata">
+		<div id="home2">
+			<a href="./index.html"><img src= "./img/sbs logo.jpg" class="image1" alt="team logo"/></a>
+		</div>
+		<div id="flags">
+		<button class="country" id="europe" title="Europe" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="austria" title="Austria" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="belgium" title="Belgium" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="france" title="France" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="germany" title="Germany" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="italy" title="Italy" onclick="DrawMap(this.id,this.title)"></button>
+		<button class="country" id="switzerland" title="Switzerland" onclick="DrawMap(this.id,this.title)"></button>
+	</div>
+
+	<div id="menu">
+			<div class="menuitem"><a href="./team.html">SBS Team</a></div>
+			<div class="menuitem"><a href="./insights.html">Insights</a></div>
+		<div class="menuitem"><a href="./data.html">Explore the Data!</a></div>
+		<div class="menuitem"><a href="./methods.html">Methods</a></div>
+		<div class="menuitem"><a href="./about.html">About</a></div>
+	</div>
+</div>
+
+<body>
+	<div id="mySidenav" class="sidenav">
+		<a href="./data.html" id="world" >Map By Categories</a>
+		<a href="./datacat.html" id="category">Highest Category Counts</a>
+		<a href="./charts.html" id="analysis">Charts & Country Statistics</a>
+		<a href="./city.html" id="city">City Case Studies</a>
+	</div>
+	<div id="mapborder">
+		<div id="map-canvas">
+		</div>
+		<div id = "selected" >
+			<div>
+				<h4><span id="selectedcountry">Europe 🇪🇺</span></h4>
+			</div>
+		</div>
+
+		<div class="infobox">
+			<button type="button" class="btn btn-info btn-lg" id="right-panel-link" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-info-sign"></span> <strong>HELP</strong></button>
+
+			<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3 class="modal-title">INFORMATION</h3>
+				</div>
+				<div class="modal-body" style="width: 90%; left:3.5vw;">
+					<div class="panel-group" id="accordion">
+					    <div class="panel panel-default">
+					      <div class="panel-heading">
+					        <h4 class="panel-title">
+					          <a data-toggle="collapse" href="#collapse1"><strong>What is on this page?</strong></a>
+					        </h4>
+					      </div>
+					      <div id="collapse1" class="panel-collapse collapse in">
+					        <div class="panel-body">							<p> This page contains a spatial visualisation of countries depicting the most common thematic categories for all labelled street names in each hexagon. Hexagons are coloured by the highest counts of street name categories.</p>					<br/></div>
+					      </div>
+					    </div>
+					    <div class="panel panel-default">
+					      <div class="panel-heading">
+					        <h4 class="panel-title">
+					          <a data-toggle="collapse" href="#collapse2"><strong>How do I use this page?</strong></a>
+					        </h4>
+					      </div>
+					      <div id="collapse2" class="panel-collapse collapse">
+					        <div class="panel-body"><ol>
+								<li> Toggle between different regional and national scales by clicking on the flags.</li>
+								<!-- <button class="country" id="europe" title="Europe"></button>
+								<button class="country" id="austria" title="Austria"></button>
+								<button class="country" id="belgium" title="Belgium"></button>
+								<button class="country" id="france" title="France"></button>
+								<button class="country" id="germany" title="Germany"></button>
+								<button class="country" id="italy" title="Italy"></button>
+								<button class="country" id="switzerland" title="Switzerland"></button> -->
+								<br/>
+								<li> The 8 thematic categories may be viewed on the right panel:
+								<ul>
+									<li> Arts and Culture </li>
+									<button class="btncat" id="art_culture" title = "Art & Culture"></button>
+									<li> Geography </li>
+									<button class="btncat" id="geography" title ="Geography"></button>
+									<li> Nature </li>
+									<button class="btncat" id = "nature_biology" title ="Nature & Biology"></button>
+									<li> Politics, Economy and Society </li>
+									<button class="btncat" id = "politics_economy_society" title ="Politics, Economy & Society"></button>
+									<li> Religion </li>
+									<button class="btncat" id = "religion" title ="Religion"> </button>
+									<li> Science and Technology </li>
+									<button class="btncat" id ="science_technology" title ="Science"></button>
+									<li> Sports</li>
+									<button class="btncat" id ="sports" title ="Sports"></button>
+									<li> Others </li>
+									<button class="btncat" id ="other" title ="Other"></button>
+									</ul>
+
+								<li> The country currently selected may be viewed at the top left corner of the map.</li>
+								<br/>
+								<li> To explore other pages, use the navigation buttons on the left side of the page. </li>
+										<div class="index-button"><img src="./img/icons/europe.png" alt="Europe image" class="index-image" style="width:65px;height:65px;"></div>
+										<div class="index-button"><img src="./img/icons/hexagons.png" alt="Hexagon image" class="index-image" style="width:65px;height:65px;"></div>
+										<div class="index-button"><img src="./img/icons/analysis.png" alt="Chart image" class="index-image" style="width:65px;height:65px;"></div>
+										<div class="index-button"><img src="./img/icons/city.png" alt="City image" class="index-image" style="width:65px;height:65px;"></div>
+							</ol>
+</div>
+					      </div>
+					    </div>
+					    <div class="panel panel-default">
+					      <div class="panel-heading">
+					        <h4 class="panel-title">
+					          <a data-toggle="collapse" href="#collapse3"><strong>Help! The data is not loading?</strong></a>
+					        </h4>
+					      </div>
+					      <div id="collapse3" class="panel-collapse collapse">
+					        <div class="panel-body"><br/><p>Please try refreshing the page until it loads. Connection to the server might have been lost.</p><br/></div>
+					      </div>
+					    </div>
+							<div class="panel panel-default">
+					      <div class="panel-heading">
+					        <h4 class="panel-title">
+					          <a data-toggle="collapse" href="#collapse4"><strong>I think the data is incorrect.</strong></a>
+					        </h4>
+					      </div>
+					      <div id="collapse4" class="panel-collapse collapse">
+					        <div class="panel-body"><br/><p> Our analysis relied on data from OpenStreetMap and WikiData API, and thus is only appropriate for a broad approximation of street toponymics in Western Europe. Besides the issues with incorrect or incomplete open data, language barriers may have impeded the analysis. Thus some hexagons may appear to have a total of zero streets. Nevertheless, we endeavoured to give a broad, accurate representation of street names in Western Europe based on our available data. </p><br/></div>
+					      </div>
+					    </div>
+					  </div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+	    	</div>
+		</div>
+	</div>
+
+
+		<div class="panelbox">
+		  <div class="panel panel-primary">
+				<div class="panel-heading">
+						<h4 class="panel-title">
+							Category with highest count
+					 </h4>
+				</div>
+				<div class="panel-body">
+					<table border = "0">
+						<tr>
+							<td style="text-align:center">
+								<button class="btncat" id="art_culture" title = "Art & Culture" ></button>
+								<p></p>
+								<button class="btncat" id="geography" title ="Geography"></button>
+								<p></p>
+								<button class="btncat" id = "nature_biology" title ="Nature & Biology"></button>
+								<p></p>
+								<button class="btncat" id = "politics_economy_society" title ="Politics, Economy & Society"></button>
+							</td>
+							<td style="text-align:center">
+								<button class="btncat" id = "religion" title ="Religion" > </button>
+								<p></p>
+								<button class="btncat" id ="science_technology" title ="Science"></button>
+								<p></p>
+								<button class="btncat" id ="sports" title ="Sports"></button>
+								<p></p>
+								<button class="btncat" id ="other" title ="Other"></button>
+							</td>
+						</tr>
+					</table>
+				</div>
+		 	</div>
+		</div>
+	</div>
+</div>
+
+
+	<!-- The Javascript from external websites gets Loaded Here -->
+	<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+	integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+	crossorigin=""></script>
+	<script src="./js/jquery-3.4.1.js"></script>
+	<script src="./js/require.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+	<script src="./js/mapMaxCategories.js"></script>
+	<script src="./js/flags.js"></script>
+
+	<script type='text/javascript' src='http://code.jquery.com/jquery-1.10.2.min.js?ver=1.10.2'></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+
+
+		if(country == undefined ){
+			var country = "europe"
+		}
+		if(category == undefined ){
+			var category = "art_culture"
+		}
+		// first time we run website -> europe
+		main(country,category)
+
+		function DrawMap(country,titlecountry) {
+			// save country
+			$("#selectedcountry").text(titlecountry + " " + getCountryFlag(country))
+			window.country = country;
+			main(country, category);
+		}
+
+	</script>
+</body>
+</html>

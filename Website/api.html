@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<head>
+	<link rel='shortcut icon' type='image/x-icon' href='./img/sbs logo.jpg' />
+
+	<title> Stories Behind Streets </title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css"/>
+
+</head>
+<a href="./index.html"><img src= "./img/sbs logo.jpg" class="image1" alt="team logo"/></a>
+<div id="menu">
+	<div class="menuitem"><a href="./team.html">SBS Team</a></div>
+	<div class="menuitem"><a href="./insights.html">Insights</a></div>
+	<div class="menuitem"><a href="./data.html">Explore the Data!</a></div>
+	<div class="menuitem"><a href="./methods.html">Methods</a></div>
+	<div class="menuitem"><a href="./about.html">About</a></div>
+</div>
+
+<body>
+	<div id="container">
+		<div id="banner">
+			<img src= "./img/banner-colour2.png" class="banner-img" alt="Hexagon banner"/>
+			<div class="banner-text">
+				<h2>API Documentation</h2>
+		</div>
+    </div>
+    <div id="text" style="height:550px;overflow:scroll">
+        <div id="sidebar">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" id="v-pills-api_1-tab" data-toggle="pill" href="#v-pills-api_1" role="tab" aria-controls="v-pills-api_1" aria-selected="true">Map Hexagons</a>
+            <a class="nav-link" id="v-pills-api_2-tab" data-toggle="pill" href="#v-pills-api_2" role="tab" aria-controls="v-pills-api_2" aria-selected="false">Map Max category</a>
+            <a class="nav-link" id="v-pills-api_3-tab" data-toggle="pill" href="#v-pills-api_3" role="tab" aria-controls="v-pills-api_3" aria-selected="false"> Category Chart</a>
+            <a class="nav-link" id="v-pills-api_4-tab" data-toggle="pill" href="#v-pills-api_4" role="tab" aria-controls="v-pills-api_4" aria-selected="false"> Period chart</a>
+            <a class="nav-link" id="v-pills-api_5-tab" data-toggle="pill" href="#v-pills-api_5" role="tab" aria-controls="v-pills-api_5" aria-selected="false"> Radar chart</a>
+            <a class="nav-link" id="v-pills-api_6-tab" data-toggle="pill" href="#v-pills-api_6" role="tab" aria-controls="v-pills-api_6" aria-selected="false"> Top streets</a>
+
+        </div>
+        </div>
+        <div id="textapi" >
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-api_1" role="tabpanel" aria-labelledby="v-pills-api_1-tab">
+                    <h3> API 1: Map Hexagons </h3>
+                    <h5>  http://dev.spatialdatacapture.org:8824/data/:area/:category</h5>
+Based on the user’s selection of the area (country/Europe) and category, an API obtained and filtered the table (‘sbs_hexcountries’) based on the selected category-of-interest, before returning the values. The hexagon IDs were then matched to the hexagon IDs of the relevant GeoJSON files that were loaded locally, so that each hexagon of the area-of-interest had a category value from the database.                     <br>
+
+                    <br>
+                   <div id="request">
+                    <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>#</th>
+                                    <th>Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Area</td>
+                                    <td><code>string</code></td>
+                                    <td><code>Required</code></td>
+                                    <td>Europe / Austria</td>
+                                </tr>
+                                <tr>
+                                    <td>Category</td>
+                                    <td><code>string</code></td>
+                                    <td><code>Required</code></td>
+                                    <td>Art_Culture</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="response">
+                        <pre>
+[
+    {"hex":"8418441ffffffff","value":7,"sum":30},
+    {"hex":"8418443ffffffff","value":114,"sum":593},
+    {"hex":"8418445ffffffff","value":49,"sum":258},
+    ...
+    {"hex":"8418447ffffffff","value":234,"sum":1117},
+    {"hex":"8418449ffffffff","value":6,"sum":48},
+    {"hex":"841844bffffffff","value":14,"sum":75},
+]
+                        </pre>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-api_2" role="tabpanel" aria-labelledby="v-pills-api_2-tab">
+                        <h3> API 2: Map Max Category </h3>
+                        <h5>  http://dev.spatialdatacapture.org:8824/map/:area</h5>
+Based on the user’s selection of the area (country/Europe), our second API returned the hexagon IDs and the category that has the highest count for each hexagon. This API connected to (‘countriesmax’), a derivative of the main datatable, containing information about the category with the highest count for each hexagon.                        <br>
+                        <br>
+                       <div id="request">
+                        <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>#</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Area</td>
+                                        <td><code>string</code></td>
+                                        <td><code>Required</code></td>
+                                        <td>Europe / Austria </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="response">
+                            <pre>
+[
+    {"country":"austria","hex":"851e0253fffffff","max_value":26,"cat":"geography"},
+    {"country":"austria","hex":"851e02c3fffffff","max_value":183,"cat":"geography"},
+    {"country":"austria","hex":"851e02c7fffffff","max_value":57,"cat":"geography"},
+    ...
+    {"country":"austria","hex":"851e02cbfffffff","max_value":23,"cat":"geography"},
+    {"country":"austria","hex":"851e02cffffffff","max_value":33,"cat":"geography"},
+]
+                            </pre>
+                        </div>
+                    </div>
+                <div class="tab-pane fade" id="v-pills-api_3" role="tabpanel" aria-labelledby="v-pills-api_3-tab">
+                        <h3> API 3: Category Chart </h3>
+                        <h5>  http://dev.spatialdatacapture.org:8824/classchart</h5>
+                        The third API provided the data necessary for plotting the charts, connecting to a datatable aggregated by countries rather than hexagon IDs, where each country had the proportion of total streets in each category.
+                        <br>
+                        <br>
+                       <div id="request">
+                        <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>#</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> Chart</td>
+                                        <td><code>string</code></td>
+                                        <td><code>Unrequired</code></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="response">
+                            <pre>
+[   
+    {"country":"austria",
+    "Art & Culture":5.66,
+    "Nature & Biology":15.31,
+    "Geography":35.31,
+    "Religion":0.6,
+    "Science & Technology":26.35,
+    "Sports":3.39,
+    "Politics, Economy & Society":5.68,
+    "Other ":7.71},
+    {"country":"belgium",
+    ...
+] 
+                            </pre>
+                        </div>
+                    </div>
+                <div class="tab-pane fade" id="v-pills-api_4" role="tabpanel" aria-labelledby="v-pills-api_4-tab">
+                        <h3> API 4: Period chart </h3>
+                        <h5>  http://dev.spatialdatacapture.org:8824/periodchart</h5>
+                        The fourth API provided time-specific data aggregated by countries. The percentage of existing street names represented by each time period from 1600 to 2020 was calculated, and added cumulatively to return the percentage of streets before each time period.
+                        <br>
+                        <br>
+                       <div id="request">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td> Chart</td>
+                                    <td><code>string</code></td>
+                                    <td><code>Unrequired</code></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        </div>
+                        <div id="response">
+                            <pre>
+[
+    {"1600":0.27,"1700":0.32,"1800":0.44,"1850":0.59,"1900":0.93,"1920":1.11,"1940":1.4,"1960":1.8,"1980":2.59,"2000":3.27,"2020":4.32,"country":"austria"},
+    {"1600":0.03,"1700":0.04,"1800":3.31,"1850":3.92,"1900":4.25,"1920":4.35,"1940":4.39,"1960":4.54,"1980":4.63,"2000":4.73,"2020":4.86,"country":"belgium"},
+    {"1600":0.31,"1700":0.46,"1800":1.41,"1850":1.79,"1900":2.88,"1920":3.4,"1940":4.07,"1960":5.09,"1980":6.12,"2000":6.88,"2020":7.63,"country":"france"},
+    ...
+]
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-api_5" role="tabpanel" aria-labelledby="v-pills-api_5-tab">
+                        <h3> API 5: Radar chart City </h3>
+                        <h5>  http://dev.spatialdatacapture.org:8824/radarchartcity/:city</h5>
+                        The first part of the fifth API provided the data necessary for plotting the first city radar chart layer, aggregated by city where the city has the proportion of total streets in each category.
+                        <br>
+                        <br>
+                       <div id="request">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>#</th>
+                                    <th>Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td> City</td>
+                                    <td><code>string</code></td>
+                                    <td><code>Required</code></td>
+                                    <td> Rome / Vienna</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        </div>
+                        <div id="response">
+                            <pre>
+[
+    {"city":"rome",
+        "Art & Culture":12.77,
+        "Nature & Biology":7.66,
+        "Geography":35.83,
+        "Religion":5.54,
+        "Science & Technology":9.04,
+        "Sports":4.21,
+        "Politics, Economy & Society":19.1,
+        "Other":5.86
+    }
+]
+                            </pre>
+                        </div>
+                        <br><br><br><br><br><br><br><br><br><br><br><br>
+
+                        <h3> API 5: Radar chart Country  </h3>
+                        <h5>  http://dev.spatialdatacapture.org:8824/radarchartcountry/:country</h5>
+                        The second part of the fifth API is basically the same as the first one, here it is just for the country of the city. 
+
+                        <br>
+                        <br>
+                        <div id="request">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>#</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> Country</td>
+                                        <td><code>string</code></td>
+                                        <td><code>Required</code></td>
+                                        <td> Europe / Austria</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            </div>
+                            <div id="response">
+                                <pre>
+[
+    {"country":"italy",
+        "Art & Culture":14.12,
+        "Nature & Biology":9.55,
+        "Geography":33.03,
+        "Religion":3.34,
+        "Science & Technology":11.87,
+        "Sports":3.8,
+        "Politics, Economy & Society":19.27,
+        "Other":5.02
+    }
+]
+                                </pre>
+                            </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-api_6" role="tabpanel" aria-labelledby="v-pills-api_6-tab">
+                        <h3> API 6: Top Streets for Borders </h3>
+                        <h5>  http://dev.spatialdatacapture.org:8824/topborder/:country/:category</h5>
+                        This API holds the top streets for the country and category a user selected/
+                        <br>
+                        <br>
+                       <div id="request">
+                        <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>#</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                            <td> Country</td>
+                                            <td><code>string</code></td>
+                                            <td><code>Required</code></td>
+                                            <td> Europe / Austria</td>
+                                    </tr>
+                                    <tr>
+                                        <td> Category</td>
+                                        <td><code>string</code></td>
+                                        <td><code>Required</code></td>
+                                        <td> Art_Culture </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="response">
+                            <pre>
+[
+    {"name":"stations"},
+    {"name":"europa"},
+    {"name":"dorp"},
+    {"name":"lange"},
+    {"name":"ravel l "}
+]
+                            </pre>
+                        </div>
+                        <br><br><br><br><br><br><br><br><br><br><br><br><br>
+                        <h3> API 6: Top Streets for Hexes </h3>
+                        <h5>  http://dev.spatialdatacapture.org:8824/tophex/:hex/:country/:category</h5>
+                        The last API returns the top streets within a hexagon on the map, this taken in account the country (to make sure the hex is in the country) and the category the user selected
+                        <br>
+                        <br>
+                       <div id="request">
+                        <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>#</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> Hex</td>
+                                        <td><code>string</code></td>
+                                        <td><code>Required</code></td>
+                                        <td> 841fa6dffffffff </td>
+                                    </tr>
+                                    <tr>
+                                        <td> Country</td>
+                                        <td><code>string</code></td>
+                                        <td><code>Required</code></td>
+                                        <td> Europe / Austria </td>
+                                    </tr>
+                                    <tr>
+                                        <td> Category</td>
+                                        <td><code>string</code></td>
+                                        <td><code>Required</code></td>
+                                        <td> Art_Culture </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="response">
+                            <pre>
+[
+    {"name":"grande"},
+    {"name":"fontaine"},
+    {"name":"victor regnart"},
+    {"name":"belle-vue"},
+    {"name":"coin du bois"}
+]
+                            </pre>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+	<div id="footer">
+		<div class="footerText">
+			<p> &copy; Team SBS </p>
+			<p> CASA Spatial Data Capture </p>
+		</div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+"Rue ","Avenue ","Allée ","Allées ","Place ","Chemin ","Quai ","Pont ","Pont au ","Port ","Route ","Boulevard ","Rond-Point ","Giratoire ","Impasse ","Tunnel ","Fort ","Autoroute ","Cours ","Côte ","autoroutier ","Villa","Square"
